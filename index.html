@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Piermarco Barbè- Software Developer</title>
+    <title>Piermarco Barbè — Software Developer</title>
     <link rel="icon" type="image/png" href="static/favicon.ico">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -25,6 +25,7 @@
             --light: #ffffff;
             --text: #ffffff;
             --text-secondary: #ddebff;
+            --text-accent: #a5b4fc;
         }
 
         body {
@@ -171,28 +172,79 @@
             border-radius: 50%;
             opacity: 0.3;
             animation: float 20s infinite;
+            will-change: transform;
         }
 
         @keyframes float {
 
             0%,
             100% {
-                transform: translateY(0) translateX(0);
+                transform: translate3d(0, 0, 0);
             }
 
             25% {
-                transform: translateY(-100vh) translateX(50px);
+                transform: translate3d(50px, -100vh, 0);
             }
 
             50% {
-                transform: translateY(-200vh) translateX(-50px);
+                transform: translate3d(-50px, -200vh, 0);
             }
 
             75% {
-                transform: translateY(-100vh) translateX(100px);
+                transform: translate3d(100px, -100vh, 0);
             }
         }
 
+        /* prefers-reduced-motion */
+        @media (prefers-reduced-motion: reduce) {
+            .animated-background,
+            .gradient-overlay,
+            .particles,
+            .gradient-blob {
+                display: none !important;
+            }
+            .skill-card,
+            .contact-link,
+            .cta-button {
+                transition: none !important;
+                animation: none !important;
+            }
+            .scroll-indicator {
+                animation: none !important;
+                display: none;
+            }
+            .hero .subtitle,
+            .hero .tagline,
+            .cta-button {
+                animation: none !important;
+            }
+        }
+
+        /* Light mode */
+        @media (prefers-color-scheme: light) {
+            body {
+                background: #f8fafc;
+            }
+            :root {
+                --text: #0f172a;
+                --text-secondary: #475569;
+                --text-accent: #6366f1;
+            }
+            .gradient-blob {
+                opacity: 0.12;
+            }
+            .skill-card {
+                background: rgba(255, 255, 255, 0.85);
+                border-color: rgba(99, 102, 241, 0.25);
+            }
+            .contact-link {
+                background: rgba(255, 255, 255, 0.85);
+                border-color: rgba(99, 102, 241, 0.25);
+            }
+            main {
+                background-color: rgba(255, 255, 255, 0.7);
+            }
+        }
 
         /* Main content */
         main {
@@ -226,18 +278,6 @@
             background-clip: text;
             animation: gradient-shift 3s ease infinite;
             background-size: 200% 200%;
-        }
-
-        @keyframes gradient-shift {
-
-            0%,
-            100% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
         }
 
         .hero .subtitle {
@@ -326,12 +366,25 @@
             justify-content: space-between;
             align-items: center;
             text-align: center;
+            cursor: pointer;
+        }
+
+        .skill-card:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
         }
 
 
+        .skill-card .icon-lg {
+            width: 2.5rem;
+            height: 2.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--secondary);
+            stroke-width: 1.5;
+        }
+
         .skill-card h3 {
             margin-bottom: 0.5rem;
-            font-size: 2.5rem;
         }
 
         .skill-card h5 {
@@ -378,6 +431,12 @@
             text-decoration: none;
             transition: all 0.3s;
             backdrop-filter: blur(10px);
+            cursor: pointer;
+        }
+
+        .contact-link:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
         }
 
         .contact-link:hover {
@@ -411,6 +470,97 @@
             50% {
                 transform: translateX(-50%) translateY(10px);
             }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            right: 1rem;
+            z-index: 1000;
+            background: rgba(10, 11, 14, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        @media (prefers-color-scheme: light) {
+            .navbar {
+                background: rgba(248, 250, 252, 0.9);
+                border-color: rgba(99, 102, 241, 0.25);
+            }
+        }
+
+        .navbar .logo {
+            font-weight: 700;
+            font-size: 1.2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar .nav-links a {
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .navbar .nav-links li:nth-child(odd) a {
+            color: var(--primary);
+        }
+
+        .navbar .nav-links li:nth-child(even) a {
+            color: var(--secondary);
+        }
+
+        .navbar .nav-links a:hover {
+            opacity: 0.7;
+        }
+
+        @media (max-width: 640px) {
+            .navbar .nav-links {
+                gap: 1rem;
+            }
+            .navbar .nav-links a {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Footer */
+        .site-footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
         }
 
         /* Responsive */
@@ -449,6 +599,17 @@
 
     <!-- Animated background particles -->
     <div class="particles" id="particles"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <a href="#home" class="logo">PB</a>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
 
     <!-- Main content -->
     <main>
@@ -502,31 +663,41 @@
                         </h2>
                         <div class="row g-4 skills-grid">
                             <div class="col-md-6 col-lg-3">
-                                <div class="skill-card h-100">
-                                    <h3>🚀</h3>
+                                <div class="skill-card h-100" tabindex="0" role="button">
+                                    <svg class="icon-lg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 2l1.5 6.5L20 10l-6.5 1.5L12 18l-1.5-6.5L4 10l6.5-1.5L12 2z"/>
+                                    </svg>
                                     <h5>Innovation</h5>
                                     <p>Always exploring the latest technologies and frameworks to stay at the forefront
                                         of software development.</p>
                                 </div>
                             </div>
                             <div class="col-md-6 col-lg-3">
-                                <div class="skill-card h-100">
-                                    <h3>💻</h3>
+                                <div class="skill-card h-100" tabindex="0" role="button">
+                                    <svg class="icon-lg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/>
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                    </svg>
                                     <h5>Coding</h5>
                                     <p>Building robust, scalable applications with clean code and best practices.</p>
                                 </div>
                             </div>
                             <div class="col-md-6 col-lg-3">
-                                <div class="skill-card h-100">
-                                    <h3>🎯</h3>
+                                <div class="skill-card h-100" tabindex="0" role="button">
+                                    <svg class="icon-lg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-3 13.3V17a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1.7A7 7 0 0 0 12 2z"/>
+                                    </svg>
                                     <h5>Problem Solving</h5>
                                     <p>Tackling complex challenges with creative solutions and a systematic approach.
                                     </p>
                                 </div>
                             </div>
                             <div class="col-md-6 col-lg-3">
-                                <div class="skill-card h-100">
-                                    <h3>📈</h3>
+                                <div class="skill-card h-100" tabindex="0" role="button">
+                                    <svg class="icon-lg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+                                        <polyline points="16 7 22 7 22 13"/>
+                                    </svg>
                                     <h5>Growth</h5>
                                     <p>Continuously learning and adapting to new technologies and methodologies.</p>
                                 </div>
@@ -557,6 +728,12 @@
                 </div>
             </div>
         </section>
+
+        <footer class="site-footer">
+            <div class="container">
+                <p>&copy; 2026 Piermarco Barbè. All rights reserved.</p>
+            </div>
+        </footer>
     </main>
 
     <script>
