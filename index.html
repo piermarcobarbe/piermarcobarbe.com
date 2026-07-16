@@ -213,10 +213,12 @@
                 animation: none !important;
                 display: none;
             }
-            .hero .subtitle,
-            .hero .tagline,
             .cta-button {
                 animation: none !important;
+            }
+            .cursor {
+                animation: none !important;
+                opacity: 1;
             }
         }
 
@@ -285,6 +287,7 @@
             color: var(--text-accent);
             margin-bottom: 2rem;
             animation: fade-in 1s ease 0.3s both;
+            display: none;
         }
 
         .hero .tagline {
@@ -293,6 +296,39 @@
             max-width: 600px;
             margin: 0 auto 3rem;
             animation: fade-in 1s ease 0.6s both;
+            display: none;
+        }
+
+        /* Typing effect */
+        .typing-container {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 800;
+            line-height: 1.15;
+            min-height: 6em;
+            text-align: left;
+        }
+
+        #typed-text {
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            white-space: pre-wrap;
+        }
+
+        .cursor {
+            -webkit-text-fill-color: var(--secondary);
+            color: var(--secondary);
+            animation: blink 0.7s step-end infinite;
+            font-weight: 300;
+            background: none;
+            -webkit-background-clip: unset;
+            background-clip: unset;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
 
         .cta-button {
@@ -618,11 +654,9 @@
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-lg-10 col-xl-8 text-center">
-                        <h1>Piermarco</h1>
-                        <p class="subtitle">Software Developer</p>
-                        <p class="tagline">
-                            Code, shells, tests, metrics and a lot of coffee.
-                        </p>
+                        <div class="typing-container" aria-label="Hi. I'm Piermarco. Let's build something remarkable.">
+                            <span id="typed-text"></span><span class="cursor">|</span>
+                        </div>
                         <div class="scroll-indicator"></div>
                     </div>
                 </div>
@@ -761,6 +795,76 @@
 
 
         createParticles();
+
+        // Typing effect
+        (function () {
+            var typedEl = document.getElementById('typed-text');
+            if (!typedEl) return;
+
+            var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (prefersReducedMotion) {
+                typedEl.textContent = 'Hi.\nI\'m Piermarco.\nLet\'s build something remarkable.';
+                return;
+            }
+
+            var lines = [
+                'Hi.',
+                "I'm Piermarco.",
+                "Let's build something "
+            ];
+            var words = ['remarkable.', 'successful.', 'useful.', 'attractive.', 'powerful.'];
+            var fullText = lines.join('\n') + words[0];
+            var typeSpeed = 60;
+            var eraseSpeed = 35;
+            var sentencePause = 1000;
+            var loopPause = 5000;
+
+            function sleep(ms) {
+                return new Promise(function (r) { setTimeout(r, ms); });
+            }
+
+            async function typeText(text, speed) {
+                for (var i = 0; i < text.length; i++) {
+                    typedEl.innerHTML += text[i] === '\n' ? '<br>' : text[i];
+                    if (text[i] === '.') {
+                        await sleep(sentencePause);
+                    } else {
+                        await sleep(speed);
+                    }
+                }
+            }
+
+            async function eraseChars(count, speed) {
+                for (var i = 0; i < count; i++) {
+                    var html = typedEl.innerHTML;
+                    // If ending with <br>, remove that; otherwise remove last char
+                    if (html.endsWith('<br>')) {
+                        typedEl.innerHTML = html.slice(0, -4);
+                    } else {
+                        typedEl.innerHTML = html.slice(0, -1);
+                    }
+                    await sleep(speed);
+                }
+            }
+
+            async function run() {
+                await typeText(fullText, typeSpeed);
+
+                var currentWordIndex = 0;
+
+                while (true) {
+                    await sleep(loopPause);
+
+                    var currentWord = words[currentWordIndex];
+                    await eraseChars(currentWord.length, eraseSpeed);
+
+                    currentWordIndex = (currentWordIndex + 1) % words.length;
+                    await typeText(words[currentWordIndex], typeSpeed);
+                }
+            }
+
+            run();
+        })();
 
     </script>
     <!-- Bootstrap JS -->
